@@ -27,7 +27,7 @@ import { UsersModule } from './users/users.module';
       port: Number(process.env.TYPEORM_PORT),
       synchronize: JSON.parse(process.env.TYPEORM_SYNCHRONIZE),
       entities: [User, Post],
-      migrations: [String(process.env.TYPEORM_MIGRATIONS)],
+      migrations: [String(process.env.TYPEORM_MIGRATIONS_NEST)],
     }),
     GraphQLModule.forRoot({
       include: [UsersModule, AuthModule, PostsModule],

@@ -7,4 +7,7 @@ export class CreatePostInput {
 
   @Field(() => String)
   original_markdown: string;
+
+  @Field(() => [String], { nullable: true })
+  tags: string[];
 }

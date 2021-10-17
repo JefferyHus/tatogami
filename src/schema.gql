@@ -20,6 +20,8 @@ type Post {
   title: String!
   original_markdown: String!
   parsed_markdown: String!
+  reading_time: String
+  tags: [String!]
 }
 
 type Query {
@@ -49,10 +51,12 @@ input AuthRegisterInput {
 input CreatePostInput {
   title: String!
   original_markdown: String!
+  tags: [String!]
 }
 
 input UpdatePostInput {
   title: String
   original_markdown: String
+  tags: [String!]
   id: ID!
 }

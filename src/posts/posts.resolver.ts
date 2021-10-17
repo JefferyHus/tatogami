@@ -40,6 +40,7 @@ export class PostsResolver {
     return this.postsService.update(data.id, data, user);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Post)
   removePost(@Args('id', { type: () => Int }) id: number) {
     return this.postsService.remove(id);

@@ -45,6 +45,21 @@ export class Post extends BaseEntity {
   })
   parsed_markdown: string;
 
+  @Field(() => String, { nullable: true })
+  @Column({
+    type: 'character varying',
+    length: 50,
+  })
+  reading_time: string;
+
+  @Field(() => [String], { nullable: true })
+  @Column({
+    type: 'character varying',
+    length: 50,
+    array: true,
+  })
+  tags: string[];
+
   @CreateDateColumn({
     type: 'timestamp with time zone',
   })

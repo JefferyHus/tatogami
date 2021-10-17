@@ -11,4 +11,7 @@ export class UpdatePostInput extends PartialType(CreatePostInput) {
 
   @Field(() => String, { nullable: true })
   original_markdown: string;
+
+  @Field(() => [String], { nullable: true })
+  tags: string[];
 }
