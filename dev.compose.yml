@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  # Node server application
+  server:
+    image: anonime/server
+    container_name: anonime_server
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: ./docker/app/dev.dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - 3000:3000
+    links:
+      - database
+  # Database
+  database:
+    image: postgres:alpine
+    restart: always
+    env_file:
+      - ./docker/env/.env.database.dev
+    ports:
+      - 5432:5432
+  # Database Managment
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

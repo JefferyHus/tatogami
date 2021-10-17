@@ -1,0 +1,58 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  email: String!
+  password: String
+  username: String
+}
+
+type UserToken {
+  token: String!
+  user: User!
+}
+
+type Post {
+  id: ID!
+  author: User!
+  title: String!
+  original_markdown: String!
+  parsed_markdown: String!
+}
+
+type Query {
+  hello: String!
+  posts: [Post!]!
+  post(id: Int!): Post!
+}
+
+type Mutation {
+  login(input: AuthLoginInput!): UserToken!
+  register(input: AuthRegisterInput!): UserToken!
+  createPost(createPostInput: CreatePostInput!): Post!
+  updatePost(updatePostInput: UpdatePostInput!): Post!
+  removePost(id: Int!): Post!
+}
+
+input AuthLoginInput {
+  email: String!
+  password: String!
+}
+
+input AuthRegisterInput {
+  email: String!
+  password: String!
+}
+
+input CreatePostInput {
+  title: String!
+  original_markdown: String!
+}
+
+input UpdatePostInput {
+  title: String
+  original_markdown: String
+  id: ID!
+}
