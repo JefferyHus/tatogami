@@ -8,6 +8,8 @@ import { Connection } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
 import { Post } from './posts/entities/post.entity';
 import { PostsModule } from './posts/posts.module';
+import { Profile } from './profiles/entities/profile.entity';
+import { ProfilesModule } from './profiles/profiles.module';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 
@@ -26,11 +28,11 @@ import { UsersModule } from './users/users.module';
       database: process.env.TYPEORM_DATABASE,
       port: Number(process.env.TYPEORM_PORT),
       synchronize: JSON.parse(process.env.TYPEORM_SYNCHRONIZE),
-      entities: [User, Post],
+      entities: [User, Post, Profile],
       migrations: [String(process.env.TYPEORM_MIGRATIONS_NEST)],
     }),
     GraphQLModule.forRoot({
-      include: [UsersModule, AuthModule, PostsModule],
+      include: [UsersModule, AuthModule, PostsModule, ProfilesModule],
       debug: true,
       playground: false,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
@@ -40,6 +42,7 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     AuthModule,
     PostsModule,
+    ProfilesModule,
   ],
   controllers: [],
   providers: [],
