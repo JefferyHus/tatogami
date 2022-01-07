@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { Repository, UpdateResult } from 'typeorm';
 import { CreateProfileInput } from './dto/create-profile.input';
 import { UpdateProfileInput } from './dto/update-profile.input';
 import { Profile } from './entities/profile.entity';
@@ -12,23 +13,43 @@ export class ProfilesService {
     private readonly profileRepository: Repository<Profile>,
   ) {}
 
-  create(createProfileInput: CreateProfileInput) {
-    return 'This action adds a new profile';
+  create(createProfileInput: CreateProfileInput, user: User): Promise<Profile> {
+    return this.profileRepository
+      .create({
+        ...createProfileInput,
+        user: {
+          id: user.id,
+        },
+      })
+      .save();
   }
 
-  findAll() {
-    return `This action returns all profiles`;
+  findOne(user: User): Promise<Profile> {
+    return this.profileRepository.findOne({
+      where: {
+        user: {
+          id: user.id,
+        },
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} profile`;
-  }
-
-  update(updateProfileInput: UpdateProfileInput) {
-    return `This action updates a # profile`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} profile`;
+  update(
+    updateProfileInput: UpdateProfileInput,
+    user: User,
+  ): Promise<UpdateResult> {
+    return this.profileRepository
+      .createQueryBuilder()
+      .update()
+      .set({
+        ...updateProfileInput,
+      })
+      .where({
+        user: {
+          id: user.id,
+        },
+      })
+      .returning('*')
+      .execute();
   }
 }

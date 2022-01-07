@@ -38,8 +38,7 @@ type Query {
   hello: String!
   posts: [Post!]!
   post(id: Int!): Post!
-  profiles: [Profile!]!
-  profile(id: Int!): Profile!
+  profile: Profile!
 }
 
 type Mutation {
@@ -50,7 +49,6 @@ type Mutation {
   removePost(id: Int!): Post!
   createProfile(createProfileInput: CreateProfileInput!): Profile!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
-  removeProfile(id: Int!): Profile!
 }
 
 input AuthLoginInput {

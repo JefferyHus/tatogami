@@ -1,39 +1,42 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { ProfilesService } from './profiles.service';
-import { Profile } from './entities/profile.entity';
+import { UseGuards } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
+import { User } from 'src/users/entities/user.entity';
 import { CreateProfileInput } from './dto/create-profile.input';
 import { UpdateProfileInput } from './dto/update-profile.input';
+import { Profile } from './entities/profile.entity';
+import { ProfilesService } from './profiles.service';
 
 @Resolver(() => Profile)
 export class ProfilesResolver {
   constructor(private readonly profilesService: ProfilesService) {}
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Profile)
   createProfile(
     @Args('createProfileInput') createProfileInput: CreateProfileInput,
-  ) {
-    return this.profilesService.create(createProfileInput);
+    @CurrentUser() user: User,
+  ): Promise<Profile> {
+    return this.profilesService.create(createProfileInput, user);
   }
 
-  @Query(() => [Profile], { name: 'profiles' })
-  findAll() {
-    return this.profilesService.findAll();
-  }
-
+  @UseGuards(GqlAuthGuard)
   @Query(() => Profile, { name: 'profile' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.profilesService.findOne(id);
+  findOne(@CurrentUser() user: User): Promise<Profile> {
+    return this.profilesService.findOne(user);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Profile)
   updateProfile(
     @Args('updateProfileInput') updateProfileInput: UpdateProfileInput,
-  ) {
-    return this.profilesService.update(updateProfileInput);
-  }
-
-  @Mutation(() => Profile)
-  removeProfile(@Args('id', { type: () => Int }) id: number) {
-    return this.profilesService.remove(id);
+    @CurrentUser() user: User,
+  ): Promise<Profile> {
+    return this.profilesService
+      .update(updateProfileInput, user)
+      .then((result) => {
+        return result.raw[0];
+      });
   }
 }
