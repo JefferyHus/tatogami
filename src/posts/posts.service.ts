@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as marked from 'marked';
+import marked from 'marked';
+import readingTime from 'reading-time';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreatePostInput } from './dto/create-post.input';
@@ -19,6 +20,8 @@ export class PostsService {
         title: data.title,
         original_markdown: data.original_markdown,
         parsed_markdown: marked(data.original_markdown),
+        tags: data.tags,
+        reading_time: readingTime(data.original_markdown).text,
         author: {
           id: user.id,
         },
@@ -47,6 +50,8 @@ export class PostsService {
     post.title = data.title || post.title;
     post.original_markdown = data.original_markdown || post.original_markdown;
     post.parsed_markdown = marked(post.original_markdown);
+    post.tags = data.tags || post.tags;
+    post.reading_time = readingTime(data.original_markdown).text;
 
     return post.save({
       reload: true,

@@ -20,12 +20,25 @@ type Post {
   title: String!
   original_markdown: String!
   parsed_markdown: String!
+  reading_time: String
+  tags: [String!]
+}
+
+type Profile {
+  id: ID!
+  user: User!
+  fullname: String!
+  biography: String
+  phone: String
+  location: String
+  years_of_experience: Float
 }
 
 type Query {
   hello: String!
   posts: [Post!]!
   post(id: Int!): Post!
+  profile: Profile!
 }
 
 type Mutation {
@@ -34,6 +47,8 @@ type Mutation {
   createPost(createPostInput: CreatePostInput!): Post!
   updatePost(updatePostInput: UpdatePostInput!): Post!
   removePost(id: Int!): Post!
+  createProfile(createProfileInput: CreateProfileInput!): Profile!
+  updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
 }
 
 input AuthLoginInput {
@@ -49,10 +64,28 @@ input AuthRegisterInput {
 input CreatePostInput {
   title: String!
   original_markdown: String!
+  tags: [String!]
 }
 
 input UpdatePostInput {
   title: String
   original_markdown: String
+  tags: [String!]
   id: ID!
+}
+
+input CreateProfileInput {
+  fullname: String!
+  biography: String
+  phone: String
+  location: String
+  years_of_experience: Float
+}
+
+input UpdateProfileInput {
+  fullname: String
+  biography: String
+  phone: String
+  location: String
+  years_of_experience: Float
 }

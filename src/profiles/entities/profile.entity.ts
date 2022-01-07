@@ -7,58 +7,70 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @ObjectType()
-@Entity({ name: 'Posts' })
-export class Post extends BaseEntity {
+@Entity({ name: 'Profiles' })
+export class Profile extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: number;
 
   @Field(() => User)
-  @ManyToOne(() => User)
+  @OneToOne(() => User)
   @JoinColumn({
     name: 'userId',
   })
-  author: User;
+  user: User;
 
   @Field(() => String)
   @Column({
     type: 'character varying',
-    length: '100',
+    length: 100,
   })
-  title: string;
+  fullname: string;
 
-  @Field(() => String)
-  @Column({
-    type: 'text',
+  @Field(() => String, {
+    nullable: true,
   })
-  original_markdown: string;
-
-  @Field(() => String)
-  @Column({
-    type: 'text',
-  })
-  parsed_markdown: string;
-
-  @Field(() => String, { nullable: true })
   @Column({
     type: 'character varying',
-    length: 50,
+    length: 500,
+    nullable: true,
   })
-  reading_time: string;
+  biography: string;
 
-  @Field(() => [String], { nullable: true })
+  @Field(() => String, {
+    nullable: true,
+  })
   @Column({
     type: 'character varying',
-    length: 50,
-    array: true,
+    length: 30,
+    nullable: true,
   })
-  tags: string[];
+  phone: string;
+
+  @Field(() => String, {
+    nullable: true,
+  })
+  @Column({
+    type: 'character varying',
+    length: 200,
+    nullable: true,
+  })
+  location: string;
+
+  @Field(() => Number, {
+    nullable: true,
+  })
+  @Column({
+    type: 'int',
+    nullable: true,
+  })
+  years_of_experience: number;
 
   @CreateDateColumn({
     type: 'timestamp with time zone',
