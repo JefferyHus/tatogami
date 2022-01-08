@@ -2,11 +2,33 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Profile {
+  id: ID!
+  user: User!
+  fullname: String!
+  biography: String
+  phone: String
+  location: String
+  years_of_experience: Float
+}
+
+type Project {
+  id: ID!
+  user: User!
+  name: String!
+  slug: String!
+  description: String
+  thumbnail: String
+  url: String!
+}
+
 type User {
   id: ID!
   email: String!
   password: String
   username: String
+  profile: Profile!
+  projects: [Project!]!
 }
 
 type UserToken {
@@ -24,21 +46,17 @@ type Post {
   tags: [String!]
 }
 
-type Profile {
-  id: ID!
-  user: User!
-  fullname: String!
-  biography: String
-  phone: String
-  location: String
-  years_of_experience: Float
-}
-
 type Query {
   hello: String!
   posts: [Post!]!
   post(id: Int!): Post!
   profile: Profile!
+  projects(findProjectInput: FindProjectInput!): [Project!]!
+  project(id: Int!): Project!
+}
+
+input FindProjectInput {
+  userId: Int!
 }
 
 type Mutation {
@@ -49,6 +67,9 @@ type Mutation {
   removePost(id: Int!): Post!
   createProfile(createProfileInput: CreateProfileInput!): Profile!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
+  createProject(createProjectInput: CreateProjectInput!): Project!
+  updateProject(updateProjectInput: UpdateProjectInput!): Project!
+  removeProject(id: Int!): Project!
 }
 
 input AuthLoginInput {
@@ -88,4 +109,19 @@ input UpdateProfileInput {
   phone: String
   location: String
   years_of_experience: Float
+}
+
+input CreateProjectInput {
+  name: String!
+  description: String!
+  thumbnail: String
+  url: String!
+}
+
+input UpdateProjectInput {
+  name: String
+  description: String
+  thumbnail: String
+  url: String
+  id: Int!
 }
