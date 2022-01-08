@@ -1,10 +1,14 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Profile } from 'src/profiles/entities/profile.entity';
+import { Project } from 'src/projects/entities/project.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -46,6 +50,18 @@ export class User extends BaseEntity {
     nullable: true,
   })
   emailVerifiedAt?: Date;
+
+  @Field(() => Profile)
+  @OneToOne(() => Profile, (profile) => profile.user, {
+    cascade: true,
+  })
+  profile: Profile;
+
+  @Field(() => [Project])
+  @OneToMany(() => Project, (project) => project.user, {
+    cascade: true,
+  })
+  projects: Project[];
 
   @CreateDateColumn({
     type: 'timestamp with time zone',
