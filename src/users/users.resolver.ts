@@ -8,6 +8,6 @@ export class UsersResolver {
 
   @Query(() => String)
   async hello(): Promise<string> {
-    return 'Welcome to Anonime !!';
+    return 'Welcome to Tatogami !!';
   }
 }

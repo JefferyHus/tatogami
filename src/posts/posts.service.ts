@@ -29,12 +29,24 @@ export class PostsService {
       .save();
   }
 
-  findAll(): Promise<Post[]> {
-    return this.postRepository.find();
+  findAll(user: User): Promise<Post[]> {
+    return this.postRepository.find({
+      where: {
+        author: {
+          id: user.id,
+        },
+      },
+    });
   }
 
-  findOne(id: number): Promise<Post> {
-    return this.postRepository.findOne(id);
+  findOne(id: number, user: User): Promise<Post> {
+    return this.postRepository.findOne(id, {
+      where: {
+        author: {
+          id: user.id,
+        },
+      },
+    });
   }
 
   async update(id: number, data: UpdatePostInput, user: User): Promise<Post> {

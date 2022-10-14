@@ -4,7 +4,6 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
 import { User } from 'src/users/entities/user.entity';
 import { CreateProjectInput } from './dto/create-project.input';
-import { FindProjectInput } from './dto/find-project.input';
 import { UpdateProjectInput } from './dto/update-project.input';
 import { Project } from './entities/project.entity';
 import { ProjectsService } from './projects.service';
@@ -22,14 +21,19 @@ export class ProjectsResolver {
     return this.projectsService.create(user, createProjectInput);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Query(() => [Project], { name: 'projects' })
-  findAll(@Args('findProjectInput') findProjectInput: FindProjectInput) {
-    return this.projectsService.findAll(findProjectInput);
+  findAll(@CurrentUser() user: User) {
+    return this.projectsService.findAll(user);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Query(() => Project, { name: 'project' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.projectsService.findOne(id);
+  findOne(
+    @Args('id', { type: () => Int }) id: number,
+    @CurrentUser() user: User,
+  ) {
+    return this.projectsService.findOne(id, user);
   }
 
   @UseGuards(GqlAuthGuard)
@@ -45,8 +49,12 @@ export class ProjectsResolver {
       });
   }
 
+  @UseGuards(GqlAuthGuard)
   @Mutation(() => Project)
-  removeProject(@Args('id', { type: () => Int }) id: number) {
-    return this.projectsService.remove(id);
+  removeProject(
+    @Args('id', { type: () => Int }) id: number,
+    @CurrentUser() user: User,
+  ) {
+    return this.projectsService.remove(id, user);
   }
 }

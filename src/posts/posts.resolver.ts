@@ -21,14 +21,19 @@ export class PostsResolver {
     return this.postsService.create(data, user);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Query(() => [Post], { name: 'posts' })
-  findAll() {
-    return this.postsService.findAll();
+  findAll(@CurrentUser() user: User) {
+    return this.postsService.findAll(user);
   }
 
+  @UseGuards(GqlAuthGuard)
   @Query(() => Post, { name: 'post' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.postsService.findOne(id);
+  findOne(
+    @Args('id', { type: () => Int }) id: number,
+    @CurrentUser() user: User,
+  ) {
+    return this.postsService.findOne(id, user);
   }
 
   @UseGuards(GqlAuthGuard)

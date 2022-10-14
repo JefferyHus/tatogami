@@ -4,7 +4,6 @@ import slugify from 'slugify';
 import { User } from 'src/users/entities/user.entity';
 import { Repository, UpdateResult } from 'typeorm';
 import { CreateProjectInput } from './dto/create-project.input';
-import { FindProjectInput } from './dto/find-project.input';
 import { UpdateProjectInput } from './dto/update-project.input';
 import { Project } from './entities/project.entity';
 
@@ -25,18 +24,24 @@ export class ProjectsService {
       .save();
   }
 
-  findAll(findProjectInput: FindProjectInput): Promise<Project[]> {
+  findAll(user: User): Promise<Project[]> {
     return this.projectRepository.find({
       where: {
         user: {
-          id: findProjectInput.userId,
+          id: user.id,
         },
       },
     });
   }
 
-  findOne(id: number): Promise<Project> {
-    return this.projectRepository.findOne(id);
+  findOne(id: number, user: User): Promise<Project> {
+    return this.projectRepository.findOne(id, {
+      where: {
+        user: {
+          id: user.id,
+        },
+      },
+    });
   }
 
   update(
@@ -61,7 +66,12 @@ export class ProjectsService {
       .execute();
   }
 
-  remove(id: number) {
-    return this.projectRepository.softDelete(id);
+  remove(id: number, user: User): Promise<UpdateResult> {
+    return this.projectRepository.softDelete({
+      id,
+      user: {
+        id: user.id,
+      },
+    });
   }
 }
