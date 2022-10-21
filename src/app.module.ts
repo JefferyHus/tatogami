@@ -14,6 +14,8 @@ import { Project } from './projects/entities/project.entity';
 import { ProjectsModule } from './projects/projects.module';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
+import { AccessKeysModule } from './access-keys/access-keys.module';
+import { AccessKey } from './access-keys/entities/access-key.entity';
 
 @Module({
   imports: [
@@ -30,7 +32,7 @@ import { UsersModule } from './users/users.module';
       database: process.env.TYPEORM_DATABASE,
       port: Number(process.env.TYPEORM_PORT),
       synchronize: JSON.parse(process.env.TYPEORM_SYNCHRONIZE),
-      entities: [User, Post, Profile, Project],
+      entities: [User, Post, Profile, Project, AccessKey],
       migrations: [String(process.env.TYPEORM_MIGRATIONS_NEST)],
     }),
     GraphQLModule.forRoot({
@@ -40,6 +42,7 @@ import { UsersModule } from './users/users.module';
         PostsModule,
         ProfilesModule,
         ProjectsModule,
+        AccessKeysModule,
       ],
       debug: true,
       playground: false,
@@ -52,6 +55,7 @@ import { UsersModule } from './users/users.module';
     PostsModule,
     ProfilesModule,
     ProjectsModule,
+    AccessKeysModule,
   ],
   controllers: [],
   providers: [],
