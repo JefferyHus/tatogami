@@ -46,6 +46,14 @@ type Post {
   tags: [String!]
 }
 
+type AccessKey {
+  id: ID!
+  name: String!
+  public_key: String!
+  private_key: String!
+  user: Int!
+}
+
 type Query {
   hello: String!
   posts: [Post!]!
@@ -53,6 +61,8 @@ type Query {
   profile: Profile!
   projects: [Project!]!
   project(id: Int!): Project!
+  accessKeys: [AccessKey!]!
+  accessKey(id: Int!): AccessKey!
 }
 
 type Mutation {
@@ -66,6 +76,9 @@ type Mutation {
   createProject(createProjectInput: CreateProjectInput!): Project!
   updateProject(updateProjectInput: UpdateProjectInput!): Project!
   removeProject(id: Int!): Project!
+  createAccessKey(createAccessKeyInput: CreateAccessKeyInput!): AccessKey!
+  updateAccessKey(updateAccessKeyInput: UpdateAccessKeyInput!): AccessKey!
+  removeAccessKey(id: Int!): AccessKey!
 }
 
 input AuthLoginInput {
@@ -119,5 +132,15 @@ input UpdateProjectInput {
   description: String
   thumbnail: String
   url: String
+  id: Int!
+}
+
+input CreateAccessKeyInput {
+  """The name of your application"""
+  name: String!
+}
+
+input UpdateAccessKeyInput {
+  name: String!
   id: Int!
 }
